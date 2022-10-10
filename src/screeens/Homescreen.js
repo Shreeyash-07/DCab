@@ -1,13 +1,46 @@
-import { StyleSheet, Text, View, Dimensions } from "react-native";
+import { StyleSheet, Text, View, Dimensions, ScrollView } from "react-native";
 import React from "react";
 const SCREEN_WIDTH = Dimensions.get("window").width;
 import { colors, parameters } from "../global/styles";
 import { Icon } from "react-native-elements";
+import { TouchableOpacity } from "react-native-web";
 
-const Homescreen = () => {
+const Homescreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text>Homescreen</Text>
+      <View style={styles.header}>
+        <View style={styles.icon1}>
+          <Icon
+            type="material-community"
+            name="menu"
+            color={colors.white}
+            size={40}
+          ></Icon>
+        </View>
+      </View>
+      <ScrollView bounces={false}>
+        <View style={styles.home}>
+          <Text style={styles.text1}>Destress your commute</Text>
+          <View style={styles.view1}>
+            <View style={styles.view8}>
+              <Text style={styles.text2}>
+                Read a book. Take a nap. Stare out the window
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("RequestScreen", {
+                    state: 0,
+                  });
+                }}
+              >
+                <View style={styles.button1}>
+                  <Text style={styles.button1Text}>Ride with Uber.</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </ScrollView>
     </View>
   );
 };
