@@ -42,9 +42,9 @@ contract Dride{
     // event used to inform user of trip completion/ cancellation / reset
     event undone(uint usrNumber, uint pairNumber, uint cancelFee);
 
-    constructor() public {
+    // constructor() public {
         
-    }
+    // }
 
     function driveRequest() public{
         // Function used to update/add user details when user signs on to the application as driver
@@ -250,6 +250,4 @@ contract Dride{
             }
         }
     }
-
-    
 }

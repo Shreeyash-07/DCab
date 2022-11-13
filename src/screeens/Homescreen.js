@@ -1,46 +1,64 @@
-import { StyleSheet, Text, View, Dimensions, ScrollView } from "react-native";
-import React from "react";
-const SCREEN_WIDTH = Dimensions.get("window").width;
-import { colors, parameters } from "../global/styles";
-import { Icon } from "react-native-elements";
-import { TouchableOpacity } from "react-native-web";
+import { StyleSheet, Text, View, Dimensions } from "react-native";
+import React, { useState } from "react";
+import MapView from "react-native-maps";
+import MenuButton from "../components/MenuButton";
+import Driver from "../components/Driver";
+
+const fakeDriverLocations = [
+  {
+    uid: "driver1",
+    latitude: 19.075983,
+    longitude: 72.877655,
+  },
+  {
+    uid: "driver2",
+    latitude: 19.075983,
+    longitude: 72.877655,
+  },
+  {
+    uid: "driver3",
+    latitude: 19.075983,
+    longitude: 72.877655,
+  },
+];
 
 const Homescreen = ({ navigation }) => {
+  const [driverLocations] = useState(fakeDriverLocations);
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.icon1}>
-          <Icon
-            type="material-community"
-            name="menu"
-            color={colors.white}
-            size={40}
-          ></Icon>
+      <MenuButton navigation={navigation} />
+      <MapView
+        initialRegion={{
+          latitude: 19.075983,
+          longitude: 72.877655,
+          longitudeDelta: 0.045,
+          latitudeDelta: 0.045,
+        }}
+        showsCompass={true}
+        rotateEnabled={false}
+        showsTraffic={true}
+        showsUserLocation={true}
+        showsMyLocationButton={true}
+        style={styles.mapView}
+      >
+        {driverLocations.map((loc) => (
+          <Driver
+            key={loc.uid}
+            uid={loc.uid}
+            location={{
+              latitude: loc.latitude,
+              longitude: loc.longitude,
+            }}
+          />
+        ))}
+      </MapView>
+      <MenuButton navigation={navigation} />
+      <View style={styles.bottomWidget}>
+        <View style={styles.whereContainer}>
+          <Text style={styles.whereTo}>Where to?</Text>
+          <Text style={styles.schedule}>Schedule</Text>
         </View>
       </View>
-      <ScrollView bounces={false}>
-        <View style={styles.home}>
-          <Text style={styles.text1}>Destress your commute</Text>
-          <View style={styles.view1}>
-            <View style={styles.view8}>
-              <Text style={styles.text2}>
-                Read a book. Take a nap. Stare out the window
-              </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate("RequestScreen", {
-                    state: 0,
-                  });
-                }}
-              >
-                <View style={styles.button1}>
-                  <Text style={styles.button1Text}>Ride with Uber.</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </ScrollView>
     </View>
   );
 };
@@ -50,149 +68,35 @@ export default Homescreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white,
-    paddingBottom: 30,
-    paddingTop: parameters.statusBarHeight,
   },
-  header: {
-    backgroundColor: colors.blue,
-    height: parameters.headerHeight,
-    alignItems: "flex-start",
-  },
-
-  image1: {
-    height: 100,
-    width: 100,
-  },
-
-  image2: { height: 60, width: 60, borderRadius: 30 },
-
-  home: {
-    backgroundColor: colors.blue,
-    paddingLeft: 20,
-  },
-
-  text1: {
-    color: colors.white,
-    fontSize: 21,
-    paddingBottom: 20,
-    paddingTop: 20,
-  },
-
-  text2: {
-    color: colors.white,
-    fontSize: 16,
-  },
-
-  view1: {
-    flexDirection: "row",
-    flex: 1,
-    paddingTop: 30,
-  },
-
-  button1: {
-    height: 40,
-    width: 150,
-    backgroundColor: colors.black,
-    borderRadius: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 20,
-  },
-
-  button1Text: {
-    color: colors.white,
-    fontSize: 17,
-    marginTop: -2,
-  },
-  card: {
-    alignItems: "center",
-    margin: SCREEN_WIDTH / 22,
-  },
-
-  view2: { marginBottom: 5, borderRadius: 15, backgroundColor: colors.grey6 },
-
-  title: {
-    color: colors.black,
-    fontSize: 16,
-  },
-  view3: {
-    flexDirection: "row",
-    marginTop: 5,
-    height: 50,
-    backgroundColor: colors.grey6,
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginHorizontal: 15,
-  },
-  text3: { marginLeft: 15, fontSize: 20, color: colors.black },
-
-  view4: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginRight: 15,
-    backgroundColor: "white",
-    paddingHorizontal: 10,
-    paddingVertical: 2,
-    borderRadius: 20,
-  },
-
-  view5: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "white",
-    paddingVertical: 25,
-    justifyContent: "space-between",
-    marginHorizontal: 15,
-    borderBottomColor: colors.grey4,
-    borderBottomWidth: 1,
+  mapView: {
+    // zIndex: 0,
     flex: 1,
   },
 
-  view6: {
-    alignItems: "center",
-    flex: 5,
+  bottomWidget: {
+    position: "absolute",
+    bottom: 0,
+    // height: 100,
+    width: "95%",
+    backgroundColor: "white",
+    zIndex: 5,
+    marginHorizontal: "2.5%",
+    borderTopEndRadius: 5,
+    borderTopStartRadius: 5,
+  },
+  whereContainer: {
+    margin: "2.5%",
+    backgroundColor: "#f1f1f1",
     flexDirection: "row",
-  },
-  view7: {
-    backgroundColor: colors.grey6,
-    height: 40,
-    width: 40,
-    borderRadius: 20,
+    justifyContent: "space-between",
     alignItems: "center",
-    justifyContent: "center",
-    marginRight: 20,
-  },
-
-  map: {
-    height: 150,
-    marginVertical: 0,
-    width: SCREEN_WIDTH * 0.92,
-  },
-
-  text4: {
-    fontSize: 20,
-    color: colors.black,
-    marginLeft: 20,
+    paddingHorizontal: "2.5%",
+    paddingVertical: 8,
     marginBottom: 20,
   },
-
-  icon1: { marginLeft: 10, marginTop: 5 },
-
-  view8: { flex: 4, marginTop: -25 },
-  carsAround: {
-    width: 28,
-    height: 14,
+  whereTo: {
+    fontSize: 19.5,
+    color: "black",
   },
-
-  location: {
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    backgroundColor: colors.blue,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  view9: { width: 4, height: 4, borderRadius: 2, backgroundColor: "white" },
 });
